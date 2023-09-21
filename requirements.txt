@@ -1,0 +1,7 @@
+python>=3.0
+pandas>=1.0.0
+matplotlib>=3.0.0
+seaborn>=0.10.0
+regex>=2020.6.8
+wordcloud>=1.8.1
+emoji>=1.2.0
