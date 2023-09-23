@@ -1,4 +1,4 @@
-## Whatsapp Sentiment Analysis
+## Whatsapp Analysis
 
 # Importing the libraries
 # Data manipulation
