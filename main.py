@@ -39,3 +39,47 @@ print(first_five_rows)
 
 
 ## Data Exploration
+
+# Let's copy our data into a new DataFrame so we don't modify the original data
+df = chat_data.copy()
+
+
+# Replace NaN values with empty strings in columns 'sender message', 'Column3', and 'Column4'
+df["sender message"].fillna("", inplace=True)
+df["Column3"].fillna("", inplace=True)
+df["Column4"].fillna("", inplace=True)
+
+# Merge sender message, Column3, and Column4 columns into a single column named Message
+df["Message"] = (
+    df["sender message"]
+    + " "
+    + df["Column3"].astype(str)
+    + " "
+    + df["Column4"].astype(str)
+)
+
+# Drop the sender message, Column3, and Column4 columns
+df.drop(columns=["sender message", "Column3", "Column4"], inplace=True)
+
+
+
+# Display the first 5 rows of the chat data
+df.head(5)
+
+
+## Data Cleaning
+
+# Remove rows that contain only missing values
+df.dropna(how="all", inplace=True)
+
+
+## Analysis
+
+# Let's see total messages sent
+total_messages = df.shape[0]
+print("Total messages sent:", total_messages)
+
+# Count the number of media messages by checking if 'Message' contains '<Media omitted>'
+num_media_messages = df[df["Message"].str.contains
+                        ("<Media omitted>")].shape[0]
+num_media_messages
