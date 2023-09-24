@@ -83,3 +83,16 @@ print("Total messages sent:", total_messages)
 num_media_messages = df[df["Message"].str.contains
                         ("<Media omitted>")].shape[0]
 num_media_messages
+
+
+# Total users join and left the groups
+# Count the number of times someone joined the group using the invite link
+join_message_count = df[df["sender name"].str.contains(" joined using this group's invite link")].shape[0]
+
+# Count the number of times someone left the group
+leave_message_count = df[df["sender name"].str.contains(" left")].shape[0]
+
+# Print the counts
+print("Total join messages:", join_message_count)
+print("Total leave messages:", leave_message_count)
+
