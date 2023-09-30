@@ -19,6 +19,8 @@ import emoji
 from collections import Counter
 # For numerical analysis
 import numpy as np
+# For creating a network graph
+import networkx as nx
 
 # Show every column in dataframe
 pd.set_option('display.max_columns', None)
@@ -298,81 +300,3 @@ for keyword, count in sorted_keywords:
 
 
 
-## Chats over time
-# Convert the 'date' column to datetime
-df["date"] = pd.to_datetime(df["date"])
-
-# Group the data by 'date' and count the number of messages for each day
-message_counts = df.groupby(df["date"].dt.date)["Message"].count()
-
-# Plot the message counts over time
-plt.figure(figsize=(12, 6))
-plt.plot(
-    message_counts.index, message_counts.values, linestyle="-", color="grey"
-)  # marker='o'
-plt.title("Messages Sent Over Time")
-plt.xlabel("Date")
-plt.ylabel("Message Count")
-plt.grid(True)
-
-# Find the day with the maximum and minimum message counts
-max_messages_day = message_counts.idxmax()
-min_messages_day = message_counts.idxmin()
-
-# Add annotations for max and min message counts
-plt.annotate(
-    f"Max Messages: {message_counts[max_messages_day]}",
-    xy=(max_messages_day, message_counts[max_messages_day]),
-    xytext=(max_messages_day, message_counts[max_messages_day] + 50),
-    arrowprops=dict(arrowstyle="->"),
-)
-plt.annotate(
-    f"Min Messages: {message_counts[min_messages_day]}",
-    xy=(min_messages_day, message_counts[min_messages_day]),
-    xytext=(min_messages_day, message_counts[min_messages_day] - 100),
-    arrowprops=dict(arrowstyle="->"),
-)
-
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
-
-# Print the results
-print(
-    f"Day with Maximum Messages: {max_messages_day} ({message_counts[max_messages_day]} messages)"
-)
-print(
-    f"Day with Minimum Messages: {min_messages_day} ({message_counts[min_messages_day]} messages)"
-)
-
-
-
-
-## User Interactive Chart
-# Create an empty directed graph
-user_interaction_graph = nx.DiGraph()
-
-# Assuming you have a DataFrame 'chat_df' with 'sender name' and 'Message' columns
-# Replace 'chat_df' with your DataFrame
-
-# Filter the DataFrame to include interactions (e.g., mentions or replies)
-interactions_df = df[df['Message'].str.contains('@', na=False)]
-
-# Iterate through interactions and add edges to the graph
-for _, row in interactions_df.iterrows():
-    sender = row['sender name']
-    message = row['Message']
-    mentioned_users = [
-        word for word in message.split() if word.startswith('@')]
-
-    for mentioned_user in mentioned_users:
-        if mentioned_user != sender:
-            user_interaction_graph.add_edge(sender, mentioned_user)
-
-# Plot the User Interaction Network
-plt.figure(figsize=(12, 8))
-layout = nx.spring_layout(user_interaction_graph, seed=96)
-nx.draw(user_interaction_graph, layout, with_labels=True, node_size=1000, font_size=10,
-        node_color='lightblue', edge_color='gray', arrowsize=10)
-plt.title('User Interaction Network')
-plt.show()
